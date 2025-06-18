@@ -31,11 +31,6 @@ if (process.env.NODE_ENV === "development") {
   };
 }
 
-
-
-
-
-
 const store = createStore(rootReducer, composeWithDevTools());
 
 const router = createBrowserRouter([
@@ -45,11 +40,7 @@ const router = createBrowserRouter([
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-
-root.render(
-  // 🔄 Optionally replace StrictMode with Fragment if suppression isn't working
-  // <React.Fragment>
+ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
       <RouterProvider
@@ -60,6 +51,6 @@ root.render(
         }}
       />
     </Provider>
-  </React.StrictMode>
-  // </React.Fragment>
+  </React.StrictMode>,
+  document.getElementById("root")
 );

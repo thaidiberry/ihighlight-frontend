@@ -20,6 +20,7 @@ export default function GoogleSignInButton({ onSuccess, onError }) {
             onError(response);
           }
         },
+        ux_mode: "popup", 
       });
 
       window.google.accounts.id.renderButton(ref, {

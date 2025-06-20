@@ -9,24 +9,38 @@ import RightHome from "../../components/home/right";
 import SendVerification from "../../components/home/sendVerification";
 import Post from "../../components/post";
 import "./style.css";
+import axios from "axios";
+
+// ✅ Adjust this if you store the backend URL elsewhere
+const BASE_URL = "https://ihighlight-backend.onrender.com";
 
 export default function Home({ setVisible, posts, loading, getAllPosts, openAuthModal }) {
   const { user } = useSelector((state) => ({ ...state }));
   const middle = useRef(null);
   const [height, setHeight] = useState(0);
 
+  // Set container height
   useEffect(() => {
     if (middle.current) {
       setHeight(middle.current.clientHeight);
     }
   }, []);
 
+  // ✅ Wake backend, then delay post load by 2s
   useEffect(() => {
     if (typeof getAllPosts === "function") {
-      getAllPosts(); // ✅ This will call either getAllPosts or getPublicPosts depending on App.js
+      // Ping backend to wake it up (non-blocking)
+      axios.get(`${BASE_URL}/ping`).catch(() => {});
+      // Delay real fetch to give backend time to spin up
+      const timeout = setTimeout(() => {
+        getAllPosts();
+      }, 2000);
+
+      return () => clearTimeout(timeout);
     }
   }, [getAllPosts]);
 
+  // Debug: log posts to console
   useEffect(() => {
     console.log("Loaded posts:", posts);
   }, [posts]);
